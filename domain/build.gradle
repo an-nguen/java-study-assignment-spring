@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'org.an-projects'
+version '0.1-ALPHA'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
+}

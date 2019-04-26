@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'org.an-projects'
+version '0.1-ALPHA'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework/spring-core
+    compile group: 'org.springframework', name: 'spring-core', version: '5.1.6.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-context
+    compile group: 'org.springframework', name: 'spring-context', version: '5.1.6.RELEASE'
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+
+    compile project(':persistence')
+    compile project(':domain')
+}
