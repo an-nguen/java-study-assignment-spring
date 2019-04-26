@@ -1,9 +1,20 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories { mavenCentral() }
 }
 
-group 'org.an-projects'
-version '0.1-ALPHA'
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+}
+
+ext { springBootVersion = '2.1.4.RELEASE' }
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+jar {
+    baseName = 'spring-app-module-persistence'
+    version = '0.1-ALPHA'
+}
 
 sourceCompatibility = 1.11
 
@@ -14,10 +25,19 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: "${springBootVersion}"
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${springBootVersion}"
+
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
 
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
     compile project(':domain')
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
 }

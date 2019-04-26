@@ -1,9 +1,27 @@
-plugins {
-    id 'java'
+buildscript {
+    ext { springBootVersion = '2.1.4.RELEASE' }
+    repositories { mavenCentral() }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
-group 'org.an-projects'
-version '0.1-ALPHA'
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar {
+    baseName = 'spring-app-module-web'
+    version = '0.1-ALPHA'
+}
+
+jar {
+    baseName = 'spring-app-module-web'
+    version = '0.1-ALPHA'
+}
 
 sourceCompatibility = 1.11
 
@@ -11,19 +29,19 @@ repositories {
     mavenCentral()
 }
 
-
 test {
     useJUnitPlatform()
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework/spring-core
-    compile group: 'org.springframework', name: 'spring-core', version: '5.1.6.RELEASE'
-    // https://mvnrepository.com/artifact/org.springframework/spring-context
-    compile group: 'org.springframework', name: 'spring-context', version: '5.1.6.RELEASE'
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: "${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: "${springBootVersion}"
 
     compile project(':persistence')
     compile project(':domain')
+
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
 }

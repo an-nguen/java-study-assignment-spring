@@ -1,14 +1,15 @@
-plugins {
-    id 'java'
-}
-
-group 'org.an-projects'
-version '0.1-ALPHA'
+apply plugin: 'java'
+apply plugin: 'idea'
 
 sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    baseName = 'spring-app-module-domain'
+    version = '0.1-ALPHA'
 }
 
 dependencies {
