@@ -1,9 +1,14 @@
-/out
-.idea/
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/jsLibraryMappings.xml
+.idea/dataSources/
+.idea/dataSources.xml
+.idea/uiDesigner.xml
+.idea/artifacts
 
 .gradle
-/build/
-!gradle-wrapper.jar
-.gradletasknamecache
-gradle/wrapper/gradle-wrapper.properties
+build/
 
