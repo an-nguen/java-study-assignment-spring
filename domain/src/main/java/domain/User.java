@@ -1,50 +1,54 @@
 package domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(length = 64, nullable = false)
-    private String username;
-    @Column(length = 32, nullable = false)
-    private String password;
-    @Column(length = 128, nullable = false)
+    private String id;
+    private String name;
+    private String userpic;
     private String email;
+    private String gender;
+    private String locale;
+    private LocalDateTime lastLogin;
 
-    public User() { }
-
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public User() {
     }
 
-    public long getId() {
+    public User(String id, String name, String email, String gender, String locale, LocalDateTime lastLogin) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.gender = gender;
+        this.locale = locale;
+        this.lastLogin = lastLogin;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserpic() {
+        return userpic;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserpic(String userpic) {
+        this.userpic = userpic;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -55,29 +59,27 @@ public class User {
         this.email = email;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        return id == user.id;
-
+    public String getGender() {
+        return gender;
     }
 
-    @Override
-    public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
     }
 }

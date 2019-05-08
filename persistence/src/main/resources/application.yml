@@ -1,0 +1,28 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_app
+    username: postgres
+    password: fox13
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+security:
+  oauth2:
+    client:
+      id: 378243158836-kad60m0oh2s54q1icfe250eorj140t1g.apps.googleusercontent.com
+      user-authorization-uri: https://accounts.google.com/o/oauth2/auth
+      authentication-scheme: form
+      scope: openid, email, profile
+      access-token-uri: https://www.googleapis.com/oauth2/v3/token
+    resource:
+      user-info-uri: https://www.googleapis.com/userinfo/v2/me
+      prefer-token-info: true

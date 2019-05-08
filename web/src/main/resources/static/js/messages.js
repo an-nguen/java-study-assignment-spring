@@ -55,7 +55,7 @@ Vue.component('message-form', {
 
 Vue.component('message-row' , {
     props: ['message', 'editMethod', 'messages'],
-    template: '<div>' +
+    template: '<div style="margin: 10px;">' +
         '<b>{{ message.id }}</b> {{ message.text }} ' +
         '<span style="position: absolute; right: 0">' +
         '<i> {{ new Date(message.creationDate) }}</i>' +
