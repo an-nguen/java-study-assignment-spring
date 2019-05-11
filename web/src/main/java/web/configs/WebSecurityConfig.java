@@ -3,14 +3,15 @@ package web.configs;
 import domain.User;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import persistence.repositories.UserRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import persistence.repositories.UserDetailsRepository;
+
+import java.time.LocalDateTime;
 
 @Configuration
 @EnableWebSecurity
@@ -21,24 +22,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login**", "/webjars/**", "/error**")
+                .antMatchers("/", "/login**", "/js/**", "/webjars/**", "/error**")
                 .permitAll()
                 .anyRequest()
-                .authenticated().and().csrf().disable();
+                .authenticated()
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
+                .and()
+                .csrf().disable();
     }
 
     @Bean
-    public PrincipalExtractor principalExtractor(UserRepository userRepository) {
+    public PrincipalExtractor principalExtractor(UserDetailsRepository userDetailsRepository) {
         return map -> {
-            return new User();
-        };
-    }
+            String id = (String) map.get("sub");
+            User user = userDetailsRepository.findById(id).orElseGet(() -> {
+                User newUser = new User();
 
-    @Bean
-    public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<OAuth2ClientContextFilter>();
-        registration.setFilter(filter);
-        registration.setOrder(-100);
-        return registration;
+                newUser.setId(id);
+                newUser.setName((String) map.get("name"));
+                newUser.setEmail((String) map.get("email"));
+                newUser.setUserpic((String) map.get("picture"));
+                newUser.setGender((String) map.get("gender"));
+                newUser.setLocale((String) map.get("locale"));
+
+                return newUser;
+            });
+
+            user.setLastLogin(LocalDateTime.now());
+
+            return userDetailsRepository.save(user);
+        };
     }
 }

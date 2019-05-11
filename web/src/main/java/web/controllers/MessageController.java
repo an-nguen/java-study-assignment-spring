@@ -7,19 +7,25 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import persistence.repositories.MessageRepository;
+import web.dto.EventType;
+import web.dto.ObjectType;
+import web.util.WsSender;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 @RestController
 @RequestMapping("messages")
 public class MessageController {
 
     private final MessageRepository repository;
+    private final BiConsumer<EventType, Message> wsSender;
 
     @Autowired
-    public MessageController(MessageRepository repository) {
+    public MessageController(MessageRepository repository, WsSender wsSender) {
         this.repository = repository;
+        this.wsSender = wsSender.getSender(ObjectType.MESSAGE, Views.idName.class);
     }
 
     @GetMapping
@@ -35,20 +41,29 @@ public class MessageController {
     }
 
     @PostMapping
-    public Message addMessage(@RequestBody Message message) {
+    public Message create(@RequestBody Message message) {
         message.setCreationDate(LocalDateTime.now());
-        return repository.save(message);
+        Message updatedMsg = repository.save(message);
+
+        wsSender.accept(EventType.CREATE, updatedMsg);
+
+        return updatedMsg;
     }
 
     @PutMapping("{id}")
     public Message updateMessage(@PathVariable("id") Message messageFromDb,
                                        @RequestBody Message message) {
         BeanUtils.copyProperties(message, messageFromDb, "id");
-        return repository.save(messageFromDb);
+
+        Message updatedMsg = repository.save(message);
+        wsSender.accept(EventType.UPDATE, updatedMsg);
+
+        return updatedMsg;
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Message message) {
         repository.delete(message);
+        wsSender.accept(EventType.REMOVE, message);
     }
 }
