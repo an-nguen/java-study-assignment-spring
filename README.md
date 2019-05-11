@@ -1,8 +1,7 @@
 ## Учебный проект
 
 Цель этого проекта является изучение:
-- система сборки Gradle
 - Spring Framework (Spring Boot, Spring Data и др.)
-- фреймворк Hibernate
 - Java 11
 
+Обучаюсь по видеокурсам: https://www.youtube.com/playlist?list=PLU2ftbIeotGqSTOVNjT4L3Yfy8jatCdhm
