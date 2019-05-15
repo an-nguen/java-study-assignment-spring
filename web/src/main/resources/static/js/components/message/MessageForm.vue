@@ -2,6 +2,7 @@
     <v-layout align-start justify-start row>
         <v-text-field v-model="text"
                       placeholder="Your message"
+                      @keyup.enter="save"
         ></v-text-field>
         <v-btn color="blue" @click="save">Send</v-btn>
     </v-layout>

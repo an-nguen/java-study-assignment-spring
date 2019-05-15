@@ -1,5 +1,9 @@
-apply plugin: 'java'
-apply plugin: 'idea'
+plugins {
+    id 'java'
+}
+
+group 'org.an-projects'
+version '0.1-ALPHA'
 
 sourceCompatibility = 1.11
 
@@ -7,13 +11,11 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    baseName = 'spring-app-module-domain'
-    version = '0.1-ALPHA'
-}
-
 dependencies {
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.0'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }

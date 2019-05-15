@@ -5,45 +5,77 @@
                 Learning: Spring Boot REST
             </v-toolbar-title>
 
+            <v-btn @click="showMessages"
+                   flat
+                   v-if="profile"
+                   :disabled="$route.path === '/'">
+                Messages
+            </v-btn>
+
             <v-spacer></v-spacer>
-            <v-item-group>
-                <v-item>
-                    <div class="authenticated" v-if="profile">
-                        <span id="user">{{profile.name}}</span>
-                        <v-btn icon href="/logout">
-                            <v-icon>exit_to_app</v-icon>
-                        </v-btn>
-                    </div>
-                </v-item>
-            </v-item-group>
+
+            <v-toolbar-items v-if="profile" class="hidden-sm-and-down">
+                <v-btn
+                       flat
+                       @click="showProfile"
+                       :disabled="$route.path === '/user'">
+                    {{profile.name}}
+                </v-btn>
+
+                <v-btn
+                       icon
+                       href="/logout">
+                    <v-icon>exit_to_app</v-icon>
+                </v-btn>
+            </v-toolbar-items>
+
+            <v-menu v-if="profile" class="hidden-md-and-up">
+                <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
+                <v-list>
+                    <v-btn
+                            flat
+                            @click="showProfile"
+                            :disabled="$route.path === '/profile'">
+                        {{profile.name}}
+                    </v-btn>
+
+                    <v-btn
+                            icon
+                            href="/logout">
+                        <v-icon>exit_to_app</v-icon>
+                    </v-btn>
+                </v-list>
+            </v-menu>
         </v-toolbar>
         <v-content>
-            <v-container class="unauthenticated" v-if="!profile">
-                Необходимо авторизоваться <a href="/login">Google</a>
-            </v-container>
-            <v-container v-else>
-                <message-list />
-            </v-container>
+            <router-view></router-view>
         </v-content>
     </v-app>
 </template>
 
 <script>
     import { mapState, mapMutations } from 'vuex'
-    import MessageList from 'components/MessageList.vue'
     import { addHandler } from "util/ws";
 
     export default {
-        components: {
-            MessageList
-        },
         computed: mapState(['profile', 'messages']),
-        mutations: mapMutations(['addMsgMutation', 'updMsgMutation', 'remMsgMutation']),
+        methods : {
+            ...mapMutations([
+                'addMsgMutation',
+                'updMsgMutation',
+                'remMsgMutation',
+                'addCommentMutation'
+            ]),
+            showMessages() {
+                this.$router.push('/')
+            },
+            showProfile() {
+                this.$router.push('/user')
+            }
+        },
         created() {
             addHandler(data => {
-                if (data.objectType === 'Message') {
-                    let index = this.messages.findIndex(item => item.id === data.body.id);
-
+                if (data.objectType === 'MESSAGE') {
                     switch (data.eventType) {
                         case 'CREATE':
                             this.addMsgMutation(data.body);
@@ -57,10 +89,23 @@
                         default:
                             console.error(`Event type is unknown "${data.eventType}"`)
                     }
+                } else if (data.objectType === 'COMMENT') {
+                    switch (data.eventType) {
+                        case 'CREATE':
+                            this.addCommentMutation(data.body);
+                            break;
+                        default:
+                            console.error(`Event type is unknown "${data.eventType}"`)
+                    }
                 } else {
                     console.error(`Object type is unknown "${data.objectType}"`)
                 }
             })
+        },
+        beforeMount() {
+            if (!this.profile) {
+                this.$router.replace('/auth')
+            }
         }
     }
 </script>

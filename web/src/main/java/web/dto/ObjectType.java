@@ -1,5 +1,5 @@
 package web.dto;
 
 public enum ObjectType {
-    MESSAGE
+    MESSAGE, COMMENT
 }

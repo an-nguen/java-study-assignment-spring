@@ -9,6 +9,9 @@
 .idea/uiDesigner.xml
 .idea/artifacts
 
+gradle.xml
 .gradle
 build/
 
+*/node_modules
+yarn.lock

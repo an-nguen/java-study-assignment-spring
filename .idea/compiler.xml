@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-app.domain.main" target="11" />
+      <module name="spring-app.domain.test" target="11" />
+      <module name="spring-app.main" target="11" />
+      <module name="spring-app.persistence.main" target="11" />
+      <module name="spring-app.persistence.test" target="11" />
+      <module name="spring-app.test" target="11" />
+      <module name="spring-app.web.main" target="11" />
+      <module name="spring-app.web.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
